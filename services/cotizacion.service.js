@@ -9,7 +9,7 @@ class CotizacionService {
     this.Vehiculo = []]
   }
 
-  ListaC(){
+  async ListaC(){
     return this.Cotizacion
     // return this.Cliente
     // return this.Vehiculo
@@ -18,7 +18,7 @@ class CotizacionService {
   //   return this.Vehiculo
   // }
 
-  NuevoCliente(aux){
+  NuevaCotizacion(aux){
     const tamaño = this.Cotizacion.length
     if (tamaño == 0){
       aux.id = 1
@@ -28,7 +28,7 @@ class CotizacionService {
     this.Cotizacion.push(aux)
   }
   
-  NuevoCliente(aux){
+  async NuevoCliente(aux){
     const tamaño = this.Cliente.length
     if (tamaño == 0){
       aux.id = 1
@@ -38,7 +38,7 @@ class CotizacionService {
     this.Cliente.push(aux)
   }
 
-  NuevoVehiculo(aux){
+  async NuevoVehiculo(aux){
     const tamaño = this.Vehiculo.length
     if (tamaño == 0){
       aux.id = 1

@@ -1,37 +1,50 @@
-const { json } = require("express");
 const express = require("express");
-
+const controlValidar = require('../middlewares/validar.middleware');
+const {crearClienteSchema,crearVehiculoSchema,crearCotizacionSchema} = require("../schemas/cotizacion.schema");
 const CotizacionService = require('../services/cotizacion.service')
 const servicio = new CotizacionService();
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('')
-});
+// router.get('/', (req, res) => {
+//   res.send('')
+// });
 
-router.get('/listaC', (req, res) => {
-  res.status(200).json(servicio.ListaC())
+router.get('/listaC', async (req, res, next) => {
+  try {
+    const lista = await servicio.ListaC();
+    res.status(200).json(lista);
+  } catch (error) {
+    next(error)
+  }
 });
 
 // router.get('/listaV', (req, res) => {
 //   res.status(200).json(servicio.ListaV())
 // });
 
-router.post('/NuevoC', (req, res) => {
-  const aux = req.body;
-  servicio.NuevoCliente(aux)
+router.post('/NuevoC', controlValidar(crearClienteSchema, 'body'), async (req, res, next) => {
+  try {
+  const body = req.body;
+  const NuevoCliente = await servicio.NuevoCliente(body);
   res.status(200).json({
     mensaje: "Datos agregados",
-    Datos: aux
-  })
+    Datos: NuevoCliente
+  });
+  } catch (error) {
+    next(error)
+  }
 });
 
-router.post('/NuevoV', (req, res) => {
-  const aux = req.body;
-  servicio.NuevoVehiculo(aux)
-  res.status(200).json({
-    mensaje: "Datos agregados",
-    Datos: aux
-  })
+router.post('/NuevoV',controlValidar(crearVehiculoSchema,'body') ,async (req, res, next) => {
+  try {
+    const body = req.body;
+    const NuevoVehiculo = await servicio.NuevoVehiculo(body);
+    res.status(200).json({
+      mensaje: "Datos agregados",
+      Datos: NuevoVehiculo
+    });
+  } catch (error) {
+    next(error)
+  }
 });
 module.exports = router;

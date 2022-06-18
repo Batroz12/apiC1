@@ -1,4 +1,5 @@
 const faker = require("faker")
+const boom = require("@hapi/boom");
 class usuarioService{
   constructor(){
     this.usuario = []
@@ -11,22 +12,23 @@ class usuarioService{
         id: faker.datatype.uuid(),
         Correo: faker.internet.email(),
         Password: faker.internet.password(),
+        esVisible: faker.datatype.boolean()
        })
      }
   }
-  create(Usuario){
+  async create(Usuario){
     Usuario.id = faker.datatype.uuid();
     this.usuario.push(Usuario)
   }
-  update(id,Usuario){
+  async update(id,Usuario){
     const posicion = this.usuario.findIndex(item => item.id == id);
     if (posicion === -1) {
-      throw new Error("usuario no encontrado");
+      throw boom.notFound("usuario no encontrado");
     }
     this.usuario[posicion] = Usuario;
     return this.usuario[posicion];
   }
-  delete(id){
+  async delete(id){
     const posicion = this.usuario.findIndex(item => item.id == id);
     if (posicion === -1) {
       throw new Error("Usuario no encontrado");
@@ -37,11 +39,18 @@ class usuarioService{
       id
     };
   }
-  findAll(){
+  async findAll(){
     return this.usuario
   }
-  findBy(id){
-    return this.usuario.find(item => item.codE === id)
+  async findBy(id){
+    const Usuario = this.usuario.find(item => item.id === id)
+    if (!Usuario) {
+      throw boom.notFound("Usuario no encontrado");
+    }
+    if (!Usuario.esVisible) {
+      throw boom.forbidden("Usuario no accesible");
+    }
+    return Usuario;
   }
 }
 

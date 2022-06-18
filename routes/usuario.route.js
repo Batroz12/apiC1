@@ -1,67 +1,115 @@
-const { json } = require("express");
 const express = require("express");
-
-const usuarioService = require('../services/usuario.service')
+const controlValidar = require('../middlewares/validar.middleware');
+const {crearUsuarioSchema,actualizarUsuarioSchema,findByUsuarioSchema} = require("../schemas/usuario.schema");
+const usuarioService = require('../services/usuario.service');
 const servicio = new usuarioService();
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  const Usuario = servicio.findAll();
+//Metodos
+router.get('/', async (req, res, next) => {
+  // servicio.findAll().then(data =>{
+  //   res.status(200).json(data);
+  // });
+  try {
+  const Usuario = await servicio.findAll();
   res.status(200).json(Usuario);
+  } catch (error) {
+    next(error)
+  }
 });
 
-router.post('/', (req, res) => {
-  const body = req.body;
-  servicio.create(body);
-  res.status(201).json({
-    mensaje: 'registro exitoso',
-    datos: body
-  });
-});
-
-router.put('/:id',async(req,res,) => {
-  const { id }= req.params;
+router.post('/', controlValidar(crearUsuarioSchema, 'body'), async(req, res, next) => {
   try {
     const body = req.body;
-    const Usuario =await servicio.update(id,body);
-    res.status(200).json(Usuario);
-  } catch (error) {
-    res.status(404).json({
-      mensaje: error.message
+    const usuario = await servicio.create(body);
+    res.status(201).json({
+      mensaje: 'registro exitoso',
+      datos: usuario
     });
+  } catch (error) {
+    next(error)
   }
 });
 
-router.patch('/:id', (req, res) => {
-  const { id } = req.params
-  const body = req.body;
-  servicio.update(id,body)
-  res.status(200).json({
-    mensaje: 'perfil de usuario parcialmente actualizado',
-    datos: servicio.findBy(id)
-  });
-});
-
-router.delete('/:id',(req,res)=> {
-  const {id} = req.params;
-  servicio.delete(id);
-  res.json({
-  mensaje :('perfil de usuario eliminado'),
-  });
-});
-
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const Usuario = servicio.findBy(id);
-  if (id == '10'){
-    res.status(404).json(
-      {
-        mensaje: 'no se encuentra el perfil solicitado'
+router.put('/:id',controlValidar(actualizarUsuarioSchema, 'body'),async (req, res, next) => {
+  try {
+    const { id }= req.params;
+      const body = {
+        id: id,
+        ...req.body
       }
-    );
-  } else {
-    res.status(200).json(Usuario);
+      const Usuario =await servicio.update(id,body);
+      res.status(200).json({
+        mensaje: 'Usuario actualizado',
+        datos: Usuario
+      });
+  } catch (error) {
+    next(error)
   }
+});
+
+router.patch('/:id',controlValidar(actualizarUsuarioSchema, 'body'), async (req,res, next) => {
+  try {
+    const { id }= req.params;
+      const body = {
+        id: id,
+        ...req.body
+      }
+      const Usuario =await servicio.update(id,body);
+      res.status(200).json({
+        mensaje: 'Usuario parcialmente actualizado',
+        datos: Usuario
+      });
+  } catch (error) {
+    next(error)
+  }
+});
+
+// router.patch('/:id',async (req, res, next) => {
+//   try {
+//   const { id } = req.params
+//   const body = req.body;
+//   const Usuario = await servicio.update(id,body);
+//   res.status(200).json(Usuario);
+//   } catch (error) {
+//     // res.status(404).json({
+//     //   mensaje: error.message
+//       // datos: servicio.findBy(id)
+//     // });
+//     next(error);
+//   }
+// });
+
+router.delete('/:id',controlValidar(findByUsuarioSchema, 'params'), async (req,res, next)=> {
+  try {
+    const {id} = req.params;
+    const UsuarioEliminado = await servicio.delete(id);
+    res.status(200).json({
+    mensaje :('perfil de usuario eliminado'),
+    });
+  } catch (error) {
+    next(error)
+
+  }
+});
+
+router.get('/:id', controlValidar(findByUsuarioSchema, 'params') , async(req, res, next) => {
+  try {
+    const { id } = req.params;
+    const Usuario = await servicio.findBy(id);
+    res.json(Usuario);
+  } catch (error) {
+    next(error);
+  }
+  // if (id == '10'){
+  //   res.status(404).json(
+  //     {
+  //       mensaje: 'no se encuentra el perfil solicitado'
+  //     }
+  //   );
+  // } else {
+  //   res.status(200).json(Usuario);
+  // }
 });
 
 module.exports = router;
