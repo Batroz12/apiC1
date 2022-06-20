@@ -7,19 +7,37 @@ const CotizacionSchema = {
     primaryKey: true,
     type: DataTypes.UUID
   },
-  createdAt: {
+  clienteId: {
+    type: DataTypes.UUID,
+    field: 'cliente_id',
     allowNull: false,
-    type: DataTypes.DATE,
-    field: 'created_at',
-    defaultValue: Sequelize.NOW
+    references: {
+      model: 'cliente'
+    }
+  },
+  autoId: {
+    type: DataTypes.UUID,
+    field: 'auto_id',
+    allowNull: false,
+    references: {
+      model: 'auto'
+    }
   }
+  
+  
 };
 
 class Cotizacion extends Model {
-  static associate(){
-
+  static associate(models){
+    this.belongsTo(models.cliente, {
+      as: 'cliente'
+    });
   }
-
+  static associate(models){
+    this.belongsTo(models.auto, {
+      as: 'auto'
+    });
+  }
   static config(sequelize){
     return {
       sequelize,

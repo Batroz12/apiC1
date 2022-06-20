@@ -15,16 +15,21 @@ const ConcesionarioSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  createdAt: {
+  administradorid: {
+    type: DataTypes.UUID,
+    field: 'administrador_id',
     allowNull: false,
-    type: DataTypes.DATE,
-    field: 'created_at',
-    defaultValue: Sequelize.NOW
+    references:{
+      model: 'administrador'
+    }
+
   }
 };
 class Concesionario extends Model {
-  static associate(){
-
+  static associate(models){
+    this.belongsTo(models.administrador, {
+      as: 'administrador'
+    });
   }
 
   static config(sequelize){

@@ -18,6 +18,10 @@ function setupModels(sequelize){
   Cotizacion.init(CotizacionSchema, Cotizacion.config(sequelize));
   Postventa.init(PostventaSchema, Postventa.config(sequelize));
   Usuario.init(UsuarioSchema, Usuario.config(sequelize));
+  //----------------------gaaaaaaaaaaaaaaaaaaaaaa-----------------
+  Administrador.associate(sequelize.models);
+  Cliente.associate(sequelize.models);
+  Auto.associate(sequelize.models);
 }
 
 module.exports = {setupModels}
