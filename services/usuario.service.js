@@ -1,56 +1,63 @@
-const faker = require("faker")
+// const faker = require("faker")
 const boom = require("@hapi/boom");
+const crypto = require("crypto");
+
+// const getConnection = require("../libs/postgres");
+// const pool = require("../libs/postgres.pool");
+const sequelize = require("../libs/sequelize");
+
 class usuarioService{
   constructor(){
-    this.usuario = []
-    this.generarUsuario()
+    // this.usuario = []
+    // this.generarUsuario()
+    // this.pool=pool;
+    // this.pool.on('error', (err) => console.log(err));
   }
-  generarUsuario(){
-     const limite = 10
-     for (let index = 0; index < limite; index++) {
-       this.usuario.push({
-        id: faker.datatype.uuid(),
-        Correo: faker.internet.email(),
-        Password: faker.internet.password(),
-        esVisible: faker.datatype.boolean()
-       })
-     }
+  // generarUsuario(){
+  //    const limite = 10
+  //    for (let index = 0; index < limite; index++) {
+  //      this.usuario.push({
+  //       id: faker.datatype.uuid(),
+  //       Correo: faker.internet.email(),
+  //       Password: faker.internet.password(),
+  //       esVisible: faker.datatype.boolean()
+  //      })
+  //    }
+  // }
+  async create(usuario){
+    const nuevoUsuario= {
+    id : crypto.randomUUID(),
+    ...usuario
+    }
+    const { id, Correo, Password } = nuevoUsuario;
+    const query = "insert into usuario (id, correo, password) values('"+ id +"','"+ Correo +"','"+ Password +"')";
+    await sequelize.query(query);
+    // const cliente = await getConnection();
+    // await cliente.query("insert into productos (id, correo, password) values('"+ id +"','"+ correo +"','"+ password +"')");
+    return nuevoUsuario;
   }
-  async create(Usuario){
-    Usuario.id = faker.datatype.uuid();
-    this.usuario.push(Usuario)
-  }
+
   async update(id,Usuario){
-    const posicion = this.usuario.findIndex(item => item.id == id);
-    if (posicion === -1) {
-      throw boom.notFound("usuario no encontrado");
-    }
-    this.usuario[posicion] = Usuario;
-    return this.usuario[posicion];
+    return Usuario;
   }
+
+  async updateParcial(id,UsuarioParcial){
+    return UsuarioParcial;
+  }
+
   async delete(id){
-    const posicion = this.usuario.findIndex(item => item.id == id);
-    if (posicion === -1) {
-      throw new Error("Usuario no encontrado");
-    }
-    this.usuario.splice(posicion, 1);
-    return {
-      mensaje: "Usuario eliminado",
-      id
-    };
+    return id;
   }
+
   async findAll(){
-    return this.usuario
+    const query = 'select * from usuario';
+    const [data] = await sequelize.query(query);
+    // const cliente = await getConnection();
+    // const salida = await cliente.query('select * from usuario');
+    return data;
   }
   async findBy(id){
-    const Usuario = this.usuario.find(item => item.id === id)
-    if (!Usuario) {
-      throw boom.notFound("Usuario no encontrado");
-    }
-    if (!Usuario.esVisible) {
-      throw boom.forbidden("Usuario no accesible");
-    }
-    return Usuario;
+    return id;
   }
 }
 
