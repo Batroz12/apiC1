@@ -1,8 +1,8 @@
 const { Model, Sequelize, DataTypes } = require('sequelize');
 
-const AUTO_TABLE = 'auto';
+const VEHICULO_ANTIGUO_TABLE = 'vehiculo_antiguo';
 
-const AutoSchema = {
+const Vehiculo_AntiguoSchema = {
   id: {
     primaryKey: true,
     type: DataTypes.UUID
@@ -20,30 +20,20 @@ const AutoSchema = {
     allowNull: true,
     type: DataTypes.STRING
   },
-  concesionarioid: {
-    type: DataTypes.UUID,
-    field: 'concesionario_id',
-    allowNull: false,
-    references:{
-      model: 'concesionario'
-    }
-  }
 };
 
-class Auto extends Model {
-  static associate(models){
-    this.belongsTo(models.concesionario, {
-      as: 'concesionario'
-    })
+class Vehiculo_Antiguo extends Model {
+  static associate(){
+
   }
 
   static config(sequelize){
     return {
       sequelize,
-      tableName: AUTO_TABLE,
-      modelName: 'auto',
+      tableName: VEHICULO_ANTIGUO_TABLE,
+      modelName: 'vehiculo_antiguo',
       timestamps: false
     };
   }
 }
-module.exports= { AUTO_TABLE, AutoSchema, Auto }
+module.exports= { VEHICULO_ANTIGUO_TABLE, Vehiculo_AntiguoSchema, Vehiculo_Antiguo}

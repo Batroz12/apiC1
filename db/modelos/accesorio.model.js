@@ -20,17 +20,21 @@ const AccesorioSchema = {
     allowNull: true,
     type: DataTypes.STRING
   },
-  createdAt: {
+  concesionarioid: {
+    type: DataTypes.UUID,
+    field: 'concesionario_id',
     allowNull: false,
-    type: DataTypes.DATE,
-    field: 'created_at',
-    defaultValue: Sequelize.NOW
+    references:{
+      model: 'concesionario'
+    }
   }
 };
 
 class Accesorio extends Model {
-  static associate(){
-
+  static associate(models){
+    this.belongsTo(models.concesionario, {
+      as: 'concesionario'
+    })
   }
 
   static config(sequelize){

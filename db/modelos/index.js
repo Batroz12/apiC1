@@ -7,6 +7,7 @@ const { CONCESIONARIO_TABLE, ConcesionarioSchema, Concesionario } = require('./c
 const { COTIZACION_TABLE, CotizacionSchema, Cotizacion } = require('./cotizacion.model');
 const { Postventa_TABLE, PostventaSchema, Postventa } = require('./postVenta.model');
 const { USUARIO_TABLE, UsuarioSchema, Usuario } = require('./usuario.model');
+const { VEHICULO_ANTIGUO_TABLE, Vehiculo_AntiguoSchema, Vehiculo_Antiguo } = require('./vehiculo_antiguo.model');
 
 function setupModels(sequelize){
   Repuesto.init(RepuestoSchema, Repuesto.config(sequelize));
@@ -18,10 +19,13 @@ function setupModels(sequelize){
   Cotizacion.init(CotizacionSchema, Cotizacion.config(sequelize));
   Postventa.init(PostventaSchema, Postventa.config(sequelize));
   Usuario.init(UsuarioSchema, Usuario.config(sequelize));
+  Vehiculo_Antiguo.init(Vehiculo_AntiguoSchema, Vehiculo_Antiguo.config(sequelize));
   //----------------------gaaaaaaaaaaaaaaaaaaaaaa-----------------
   Administrador.associate(sequelize.models);
   Cliente.associate(sequelize.models);
   Auto.associate(sequelize.models);
+  Vehiculo_Antiguo.associate(sequelize.models);
+  Concesionario.associate(sequelize.models);
 }
 
 module.exports = {setupModels}
