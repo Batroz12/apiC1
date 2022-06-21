@@ -37,14 +37,14 @@ class Postventa extends Model {
   });
   }
   static associate(models){
-  this.belongsTo(models.cliente, {
-    as: 'cliente'
-  });
+    this.belongsTo(models.cliente, {
+      as: 'cliente'
+    });
   }
   static associate(models){
-  this.belongsTo(models.concesionario, {
-    as: 'concesionario'
-  });
+    this.belongsTo(models.concesionario, {
+      as: 'concesionario'
+    });
   }
 
   static config(sequelize){

@@ -29,12 +29,16 @@ const AutoSchema = {
     }
   }
 };
-
 class Auto extends Model {
   static associate(models){
     this.belongsTo(models.concesionario, {
       as: 'concesionario'
     })
+  }
+  static associate(models){
+    this.hasMany(models.cotizacion, {
+      foreignKey: 'autoId'
+    });
   }
 
   static config(sequelize){

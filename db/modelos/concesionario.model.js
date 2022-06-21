@@ -14,21 +14,32 @@ const ConcesionarioSchema = {
   servicio: {
     allowNull: false,
     type: DataTypes.STRING
-  },
-  administradorid: {
-    type: DataTypes.UUID,
-    field: 'administrador_id',
-    allowNull: false,
-    references:{
-      model: 'administrador'
-    }
-
   }
 };
 class Concesionario extends Model {
   static associate(models){
-    this.belongsTo(models.administrador, {
-      as: 'administrador'
+    this.hasOne(models.administrador, {
+      foreignKey: 'concesionarioId'
+    });
+  }
+  static associate(models){
+    this.hasMany(models.auto, {
+      foreignKey: 'concesionarioid'
+    });
+  }
+  static associate(models){
+    this.hasMany(models.repuesto, {
+      foreignKey: 'concesionarioid'
+    });
+  }
+  static associate(models){
+    this.hasMany(models.accesorio, {
+      foreignKey: 'concesionarioid'
+    });
+  }
+  static associate(models){
+    this.hasMany(models.postventa, {
+      foreignKey: 'concesionarioid'
     });
   }
 

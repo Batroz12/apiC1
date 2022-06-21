@@ -7,27 +7,43 @@ const AdministradorSchema = {
     primaryKey: true,
     type: DataTypes.UUID
   },
+  nombre: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  apellido: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
   correo: {
     allowNull: false,
-    type: DataTypes.STRING,
-    unique: true
+    type: DataTypes.STRING
   },
   password: {
     allowNull: false,
     type: DataTypes.STRING,
     unique: true
   },
-  createdAt: {
+  concesionarioId: {
+    type: DataTypes.UUID,
+    field: 'concesionario_id',
     allowNull: false,
-    type: DataTypes.DATE,
-    field: 'created_at',
-    defaultValue: Sequelize.NOW
+    references: {
+      model: 'concesionario'
+    }
   }
 };
 
 class Administrador extends Model {
-  static associate(){
-
+  static associate(models){
+    this.hasOne(models.usuario, {
+      foreignKey: 'administradorId'
+    })
+  }
+  static associate(models){
+    this.belongsTo(models.concesionario, {
+      as: 'concesionario'
+    })
   }
 
   static config(sequelize){

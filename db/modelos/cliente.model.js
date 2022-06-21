@@ -29,19 +29,27 @@ const ClienteSchema = {
     allowNull: false,
     type: DataTypes.STRING,
     unique: true
-  },
-  createdAt: {
-    allowNull: false,
-    type: DataTypes.DATE,
-    field: 'created_at',
-    defaultValue: Sequelize.NOW
+    
   }
 };
 
 class Cliente extends Model {
-  static associate(){
-
+  static associate(models){
+    this.hasOne(models.usuario, {
+      foreignKey: 'clienteId'
+    });
   }
+  static associate(models){
+    this.hasMany(models.cotizacion, {
+      foreignKey: 'clienteId'
+    });
+  }
+  static associate(models){
+    this.hasMany(models.postventa, {
+      foreignKey: 'clienteid'
+    });
+  }
+  
 
   static config(sequelize){
     return {

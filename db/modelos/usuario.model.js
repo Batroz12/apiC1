@@ -25,12 +25,25 @@ const UsuarioSchema = {
       model: 'cliente'
     }
   },
+  administradorId: {
+    type: DataTypes.UUID,
+    field: 'administrador_id',
+    allowNull: false,
+    references: {
+      model: 'administrador'
+    }
+  }
 };
 
 class Usuario extends Model {
   static associate(models){
     this.belongsTo(models.cliente, {
       as: 'cliente'
+    });
+  }
+  static associate(models){
+    this.belongsTo(models.administrador, {
+      as: 'administrador'
     });
   }
 

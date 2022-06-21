@@ -1,4 +1,5 @@
-const express = require('express'); 
+const express = require('express');
+const cors = require("cors"); 
 const rutas = require('./routes');
 
 const { manejarError, mostrarError, boomManejarError } = require('./middlewares/error.middleware');
@@ -7,6 +8,7 @@ const aplicacion = express();
 
 const port = 3500;
 aplicacion.use(express.json());
+aplicacion.use(cors());
 
 
 rutas(aplicacion);

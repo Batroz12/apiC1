@@ -21,11 +21,17 @@ function setupModels(sequelize){
   Usuario.init(UsuarioSchema, Usuario.config(sequelize));
   Vehiculo_Antiguo.init(Vehiculo_AntiguoSchema, Vehiculo_Antiguo.config(sequelize));
   //----------------------gaaaaaaaaaaaaaaaaaaaaaa-----------------
+  Repuesto.associate(sequelize.models);
+  Accesorio.associate(sequelize.models);
   Administrador.associate(sequelize.models);
-  Cliente.associate(sequelize.models);
   Auto.associate(sequelize.models);
-  Vehiculo_Antiguo.associate(sequelize.models);
+  Cliente.associate(sequelize.models);
   Concesionario.associate(sequelize.models);
+  Cotizacion.associate(sequelize.models);
+  Postventa.associate(sequelize.models),
+  Usuario.associate(sequelize.models);
+  Vehiculo_Antiguo.associate(sequelize.models);
+  
 }
 
 module.exports = {setupModels}

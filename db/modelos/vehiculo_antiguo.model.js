@@ -23,8 +23,10 @@ const Vehiculo_AntiguoSchema = {
 };
 
 class Vehiculo_Antiguo extends Model {
-  static associate(){
-
+  static associate(models){
+    this.hasMany(models.postventa, {
+      foreignKey: 'vehiculoAntiguoid'
+    });
   }
 
   static config(sequelize){
