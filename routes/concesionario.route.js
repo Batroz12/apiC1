@@ -1,64 +1,61 @@
 const express = require("express");
 const controlValidar = require('../middlewares/validar.middleware');
-const {crearUsuarioSchema,actualizarUsuarioSchema,findByUsuarioSchema} = require("../schemas/usuario.schema");
-const usuarioService = require('../services/usuario.service');
-const servicio = new usuarioService();
+const {crearConcesionarioSchema,actualizarConcesionarioSchema,findByConcesionarioSchema} = require("../schemas/usuario.schema");
+const concesionarioService = require('../services/concesionario.service');
+const servicio = new concesionarioService();
 const router = express.Router();
 
 //Metodos
 router.get('/', async (req, res, next) => {
-  // servicio.findAll().then(data =>{
-  //   res.status(200).json(data);
-  // });
   try {
-  const Usuario = await servicio.findAll();
-  res.status(200).json(Usuario);
+  const concesionario = await servicio.findAll();
+  res.status(200).json(concesionario);
   } catch (error) {
     next(error)
   }
 });
 
-router.post('/', controlValidar(crearUsuarioSchema, 'body'), async(req, res, next) => {
+router.post('/', controlValidar(crearConcesionarioSchema, 'body'), async(req, res, next) => {
   try {
     const body = req.body;
-    const usuario = await servicio.create(body);
+    const concesionario = await servicio.create(body);
     res.status(201).json({
       mensaje: 'registro exitoso',
-      datos: usuario
+      datos: concesionario
     });
   } catch (error) {
     next(error)
   }
 });
 
-router.put('/:id',controlValidar(actualizarUsuarioSchema, 'body'),async (req, res, next) => {
+router.put('/:id',controlValidar(actualizarConcesionarioSchema, 'body'),async (req, res, next) => {
   try {
     const { id }= req.params;
       const body = {
         id: id,
         ...req.body
       }
-      const Usuario =await servicio.update(id,body);
+      const Concesionario =await servicio.update(id,body);
       res.status(200).json({
-        mensaje: 'Usuario actualizado',
-        datos: Usuario
+        mensaje: 'Actualizado',
+        datos: Concesionario
       });
   } catch (error) {
     next(error)
   }
 });
 
-router.patch('/:id',controlValidar(actualizarUsuarioSchema, 'body'), async (req,res, next) => {
+router.patch('/:id',controlValidar(actualizarConcesionarioSchema, 'body'), async (req,res, next) => {
   try {
     const { id }= req.params;
       const body = {
         id: id,
         ...req.body
       }
-      const Usuario =await servicio.update(id,body);
+      const Concesionario =await servicio.update(id,body);
       res.status(200).json({
-        mensaje: 'Usuario parcialmente actualizado',
-        datos: Usuario
+        mensaje: 'Parcialmente actualizado',
+        datos: Concesionario
       });
   } catch (error) {
     next(error)
@@ -80,23 +77,23 @@ router.patch('/:id',controlValidar(actualizarUsuarioSchema, 'body'), async (req,
 //   }
 // });
 
-router.delete('/:id',controlValidar(findByUsuarioSchema, 'params'), async (req,res, next)=> {
+router.delete('/:id',controlValidar(findByConcesionarioSchema, 'params'), async (req,res, next)=> {
   try {
     const {id} = req.params;
-    const UsuarioEliminado = await servicio.delete(id);
+    const ConcesionarioEliminado = await servicio.delete(id);
     res.status(200).json({
-    mensaje :('perfil de usuario eliminado'),
+    mensaje :('Eliminado'),
     });
   } catch (error) {
     next(error)
   }
 });
 
-router.get('/:id', controlValidar(findByUsuarioSchema, 'params') , async(req, res, next) => {
+router.get('/:id', controlValidar(findByConcesionarioSchema, 'params') , async(req, res, next) => {
   try {
     const { id } = req.params;
-    const Usuario = await servicio.findBy(id);
-    res.json(Usuario);
+    const Concesionario = await servicio.findBy(id);
+    res.json(Concesionario);
   } catch (error) {
     next(error);
   }

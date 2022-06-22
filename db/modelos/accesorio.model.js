@@ -23,7 +23,7 @@ const AccesorioSchema = {
   concesionarioid: {
     type: DataTypes.UUID,
     field: 'concesionario_id',
-    allowNull: false,
+    allowNull: true,
     references:{
       model: 'concesionario'
     }

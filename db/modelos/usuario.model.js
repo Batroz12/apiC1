@@ -20,7 +20,7 @@ const UsuarioSchema = {
   clienteId: {
     type: DataTypes.UUID,
     field: 'cliente_id',
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'cliente'
     }
@@ -28,7 +28,7 @@ const UsuarioSchema = {
   administradorId: {
     type: DataTypes.UUID,
     field: 'administrador_id',
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'administrador'
     }

@@ -2,7 +2,7 @@
 const boom = require("@hapi/boom");
 const crypto = require("crypto");
 
-const sequelize = require("../libs/sequelize");
+const { models } = require("../libs/sequelize");
 
 class Repuestoservice{
   constructor(){
@@ -45,10 +45,8 @@ class Repuestoservice{
       id: crypto.randomUUID(),
       ...repuesto
     }
-    const { id, nombre, precio}= nuevoRepuesto;
-    const query= "insert into repuesto (id, nombre, precio) values('"+ id +"','"+ nombre +"',"+ precio +")";
-    await sequelize.query(query);
-    return nuevoRepuesto;
+    const salida = await models.repuesto.create(nuevoRepuesto);
+    return salida;
   }
 
   async update(id, repuesto) {
@@ -60,17 +58,18 @@ class Repuestoservice{
   }
 
   async delete(id) {
+    // const data = await models.repuesto.drop(nuevoRepuesto);
     return id;
   }
 
   async findAll() {
-    const query = 'select * from repuesto';
-    const [data] = await sequelize.query(query);
+    const data = await models.repuesto.findAll();
     return data;
   }
 
-  async findBy() {
-    return id;
+  async findBy(id) {
+    const data = await models.repuesto.findByPk(id);
+    return data;
   }
 }
 

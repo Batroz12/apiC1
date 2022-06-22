@@ -1,67 +1,86 @@
-const { json } = require("express");
 const express = require("express");
-
+const controlValidar = require('../middlewares/validar.middleware');
+const {crearAutoSchema,actualizarAutoSchema,eliminarAutosSchema,findByAutoSchema}= require("../schemas/auto.schema");
 const AutoService = require('../services/autos.service')
 const servicio = new AutoService();
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  const auto = servicio.findAll();
-  res.status(200).json(auto);
+//Metodos
+router.get('/', async (req, res, next) => {
+  try {
+    const Auto = await servicio.findAll();
+    res.status(200).json(Auto);
+    } catch (error) {
+      next(error)
+  }
 });
 
-router.post('/', (req, res) => {
-  const body = req.body;
-  servicio.create(body);
-  res.status(201).json({
-    mensaje: 'registro exitoso',
-    datos: body
-  });
-});
-
-router.put('/:id',async(req,res,) => {
-  const { id }= req.params;
+router.post('/', controlValidar(crearAutoSchema, 'body'), async(req, res, next) => {
   try {
     const body = req.body;
-    const auto =await servicio.update(id,body);
-    res.status(200).json(auto);
-  } catch (error) {
-    res.status(404).json({
-      mensaje: error.message
+    const auto = await servicio.create(body);
+    res.status(201).json({
+      mensaje: 'registro exitoso',
+      datos: auto
     });
+  } catch (error) {
+    next(error)
   }
-
 });
 
-router.patch('/:id', (req, res) => {
-  const { id } = req.params
-  const body = req.body;
-  servicio.update(id,body)
-  res.status(200).json({
-    mensaje: 'registro parcialmente actualizado',
-    datos: servicio.findBy(id)
-  });
-});
-
-router.delete('/:id',(req,res)=> {
-  const {id} = req.params;
-  servicio.delete(id);
-  res.json({
-  mensaje :('registro eliminado'),
-  });
-});
-
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const auto = servicio.findBy(id);
-  if (id == '10'){
-    res.status(404).json(
-      {
-        mensaje: 'no se encuentra el auto solicitado'
+router.put('/:id',controlValidar(actualizarAutoSchema, 'body'),async (req, res, next) => {
+  try {
+    const { id }= req.params;
+      const body = {
+        id: id,
+        ...req.body
       }
-    );
-  } else {
-    res.status(200).json(auto);
+      const Auto =await servicio.update(id,body);
+      res.status(200).json({
+        mensaje: 'Auto actualizado',
+        datos: Auto
+      });
+  } catch (error) {
+    next(error)
+  }
+});
+
+router.patch('/:id',controlValidar(actualizarAutoSchema, 'body'),async (req, res, next) => {
+  try {
+    const { id }= req.params;
+      const body = {
+        id: id,
+        ...req.body
+      }
+      const Auto =await servicio.update(id,body);
+      res.status(200).json({
+        mensaje: 'Auto parcialmente actualizado',
+        datos: Auto
+      });
+  } catch (error) {
+    next(error)
+  }
+});
+
+router.delete('/:id',controlValidar(findByAutoSchema, 'params'), async (req,res, next)=> {
+  try {
+    const {id} = req.params;
+    const AutoEliminado = await servicio.delete(id);
+    res.status(200).json({
+    mensaje :('auto eliminado'),
+    });
+  } catch (error) {
+    next(error)
+  }
+});
+
+router.get('/:id', controlValidar(findByAutoSchema, 'params') , async(req, res, next) => {
+  try {
+    const { id } = req.params;
+    const Usuario = await servicio.findBy(id);
+    res.json(Usuario);
+  } catch (error) {
+    next(error);
   }
 });
 

@@ -1,73 +1,61 @@
-const faker = require("faker")
+const boom = require("@hapi/boom");
+const crypto = require("crypto");
+
+const { models } = require("../libs/sequelize");
 
 class AutoService{
   constructor(){
-    this.auto=[{
-      id: faker.datatype.uuid(),
-      nombre: "4Runner",
-      imagen: "https://www.toyotaperu.com.pe/sites/default/files/camioneta-4Runner-Toyota-4x4.png",
-      precio: "S/23100"
-    },
-    {
-      id: faker.datatype.uuid(),
-      nombre: "Avanza",
-      imagen: "https://www.toyotaperu.com.pe/sites/default/files/avanza-listado_0.png",
-      precio: "S/82680"
-    },
-    {
-      id: faker.datatype.uuid(),
-      nombre: "Hilux",
-      imagen: "https://www.toyotaperu.com.pe/sites/default/files/HILUX.png",
-      precio: "S/160280"
-    }
-  ]
+  //   this.auto=[{
+  //     id: faker.datatype.uuid(),
+  //     nombre: "4Runner",
+  //     imagen: "https://www.toyotaperu.com.pe/sites/default/files/camioneta-4Runner-Toyota-4x4.png",
+  //     precio: "S/23100"
+  //   },
+  //   {
+  //     id: faker.datatype.uuid(),
+  //     nombre: "Avanza",
+  //     imagen: "https://www.toyotaperu.com.pe/sites/default/files/avanza-listado_0.png",
+  //     precio: "S/82680"
+  //   },
+  //   {
+  //     id: faker.datatype.uuid(),
+  //     nombre: "Hilux",
+  //     imagen: "https://www.toyotaperu.com.pe/sites/default/files/HILUX.png",
+  //     precio: "S/160280"
+  //   }
+  // ]
     //this.GenerarDatos();
   }
 
-  GenerarDatos() {
-    const size = 10;
-    for (let index = 0; index < size; index++) {
-      this.auto.push({
-        id: faker.datatype.uuid(),
-        nombre: faker.commerce.productName(),
-        precio: parseInt(faker.commerce.price()),
-        imagen: faker.image.imageUrl()
-      });
+  async create(auto) {
+    const nuevoAuto={
+      id: crypto.randomUUID(),
+      ...auto
     }
+    const salida = await models.auto.create(nuevoAuto);
+    return salida;
   }
 
-  create(auto) {
-    auto.id = faker.datatype.uuid();
-    this.auto.push(auto);
+  async update(id, auto) {
+    return auto;
   }
 
-  update(id, auto) {
-    const posicion = this.auto.findIndex(item => item.id == id);
-    if (posicion === -1) {
-      throw new Error("auto no encontrado");
-    }
-    this.auto[posicion] = auto;
-    return this.auto[posicion];
+  async updateParcial(id, autoParcial) {
+    return autoParcial;
+  } 
+
+  async delete(id) {
+    return id;
   }
 
-  delete(id) {
-    const posicion = this.auto.findIndex(item => item.id == id);
-    if (posicion === -1) {
-      throw new Error("Producto no encontrado");
-    }
-    this.auto.splice(posicion, 1);
-    return {
-      mensaje: "operacion realizada",
-      id
-    };
+  async findAll() {
+    const data = await models.auto.findAll();
+    return data;
   }
 
-  findAll() {
-    return this.auto;
-  }
-
-  findBy() {
-    return this.auto.find(item => item.id === id);
+  async findBy() {
+    const data = await models.auto.findByPk(id);
+    return data;
   }
 }
 

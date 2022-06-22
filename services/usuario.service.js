@@ -4,7 +4,7 @@ const crypto = require("crypto");
 
 // const getConnection = require("../libs/postgres");
 // const pool = require("../libs/postgres.pool");
-const sequelize = require("../libs/sequelize");
+const { models } = require("../libs/sequelize");
 
 class usuarioService{
   constructor(){
@@ -29,12 +29,10 @@ class usuarioService{
     id : crypto.randomUUID(),
     ...usuario
     }
-    const { id, Correo, Password } = nuevoUsuario;
-    const query = "insert into usuario (id, correo, password) values('"+ id +"','"+ Correo +"','"+ Password +"')";
-    await sequelize.query(query);
+    const salida = await models.usuario.create(nuevoUsuario);
+    return salida;
     // const cliente = await getConnection();
     // await cliente.query("insert into productos (id, correo, password) values('"+ id +"','"+ correo +"','"+ password +"')");
-    return nuevoUsuario;
   }
 
   async update(id,Usuario){
@@ -50,14 +48,14 @@ class usuarioService{
   }
 
   async findAll(){
-    const query = 'select * from usuario';
-    const [data] = await sequelize.query(query);
+    const data = await models.repuesto.findAll();
+    return data;
     // const cliente = await getConnection();
     // const salida = await cliente.query('select * from usuario');
-    return data;
   }
   async findBy(id){
-    return id;
+    const data = await models.repuesto.findByPk(id);
+    return data;
   }
 }
 

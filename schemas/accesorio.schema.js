@@ -1,4 +1,3 @@
-const { required } = require("joi");
 const Joi = require("joi");
 
 const id = Joi.string().uuid();
@@ -6,25 +5,25 @@ const nombre = Joi.string().min(3).max(30);
 const imagen = Joi.string().min(5).max(100);
 const precio = Joi.number().min(4);
 
-const crearRepuestoSchema = Joi.object({
+const crearAccesorioSchema = Joi.object({
   nombre: nombre.required(),
   precio: precio.required(),
   imagen: imagen.required()
 });
 
-const actualizarRepuestoSchema = Joi.object({
+const actualizarAccesorioSchema = Joi.object({
   id : id.required(),
   nombre,
   precio
 });
 
-const eliminarRepuestoSchema = Joi.object({
+const eliminarAccesorioSchema = Joi.object({
   id : id.required()
 });
 
 
-const findByRepuestoSchema = Joi.object({
+const findByAccesorioSchema = Joi.object({
   id : id.required()
 });
 
-module.exports = {crearRepuestoSchema,actualizarRepuestoSchema,eliminarRepuestoSchema,findByRepuestoSchema};
+module.exports = {crearAccesorioSchema,actualizarAccesorioSchema,eliminarAccesorioSchema,findByAccesorioSchema};

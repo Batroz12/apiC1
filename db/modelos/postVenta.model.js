@@ -10,21 +10,21 @@ const PostventaSchema = {
   vehiculoAntiguoid: {
     type: DataTypes.UUID,
     field: 'vehiculo_antiguo_id',
-    allowNull: false,
+    allowNull: true,
     references:{
       model: 'vehiculo_antiguo'
     }},
     clienteid: {
       type: DataTypes.UUID,
       field: 'cliente_id',
-      allowNull: false,
+      allowNull: true,
       references:{
         model: 'cliente'
     }},
       concesionarioid: {
         type: DataTypes.UUID,
         field: 'concesionario_id',
-        allowNull: false,
+        allowNull: true,
         references:{
           model: 'concesionario'
       }}

@@ -1,6 +1,4 @@
-const { json } = require("express");
 const express = require("express");
-
 const Repuestoservice = require('../services/repuestos.service')
 const servicio = new Repuestoservice();
 const router = express.Router();
@@ -59,34 +57,24 @@ router.put(
 );
 
 // DELETE --> Eliminar
-router.delete(
-  '/:id',
-  controlValidar(eliminarRepuestoSchema, 'params'),
-  (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const salida = servicio.delete(id);
-      res.json(salida);
-    } catch (error) {
-      res.status(404).json({
-        mensaje: error.message,
-      });
-    }
+router.delete('/:id',controlValidar(eliminarRepuestoSchema, 'params'), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const salida = servicio.delete(id);
+    res.json(salida);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
-router.get(
-  '/:id',
-  controlValidar(findByRepuestoSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const repuesto = await servicio.findBy(id);
-      res.json(repuesto);
-    } catch (error) {
-      next(error);
-    }
+router.get('/:id',controlValidar(findByRepuestoSchema, 'params'), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const repuesto = await servicio.findBy(id);
+    res.status(200).json(repuesto);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 module.exports = router;

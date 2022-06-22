@@ -17,7 +17,7 @@ const ClienteSchema = {
     type: DataTypes.STRING
   },
   correo: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.STRING
   },
   dni: {

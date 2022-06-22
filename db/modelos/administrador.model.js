@@ -8,11 +8,11 @@ const AdministradorSchema = {
     type: DataTypes.UUID
   },
   nombre: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING
   },
   apellido: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING
   },
   correo: {
@@ -27,7 +27,7 @@ const AdministradorSchema = {
   concesionarioId: {
     type: DataTypes.UUID,
     field: 'concesionario_id',
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'concesionario'
     }

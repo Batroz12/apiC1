@@ -10,7 +10,7 @@ const CotizacionSchema = {
   clienteId: {
     type: DataTypes.UUID,
     field: 'cliente_id',
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'cliente'
     }
@@ -18,7 +18,7 @@ const CotizacionSchema = {
   autoId: {
     type: DataTypes.UUID,
     field: 'auto_id',
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'auto'
     }
